@@ -1,11 +1,18 @@
-import sys
-import os
+# scripts/setup_db.py
 
-# Add the root folder to the Python path so we can import lib.*
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+import sqlite3
 
-from lib.db.schema import create_tables
+def setup_db():
+    connection = sqlite3.connect("articles.db")
+    cursor = connection.cursor()
+
+    with open("lib/db/schema.sql") as f:
+        cursor.executescript(f.read())
+
+    connection.commit()
+    connection.close()
+    print("Database setup complete.")
 
 if __name__ == "__main__":
-    create_tables()
-    print("Database setup complete!")
+    setup_db()
+
